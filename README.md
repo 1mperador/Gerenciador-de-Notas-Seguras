@@ -1,0 +1,2 @@
+# Gerenciador-de-Notas-Seguras
+ 
