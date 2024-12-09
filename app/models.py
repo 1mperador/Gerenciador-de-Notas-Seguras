@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+from sqlalchemy import Column, Integer, String
+from .database import Base
 
 # Modelos de Notas
 class NoteIn(BaseModel):
@@ -22,3 +24,12 @@ class User(BaseModel):
 class UserLogin(BaseModel):
     username: str
     password: str
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    password = Column(String)
+
+

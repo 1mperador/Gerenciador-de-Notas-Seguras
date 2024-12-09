@@ -1,10 +1,17 @@
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime, timedelta
 import uuid
+from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from app.routes import notes, auth
+from app.database import Base, engine, get_db
+from app.models import User # Importe todos os modelos definidos 
+from sqlalchemy.orm import Session
+
+
+# Cria as tabelas no banco
+Base.metadata.create_all(bind=engine)
 
 
 # Base Configurations
@@ -88,3 +95,11 @@ def delete_note(note_id: str):
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
     return {"detail": "Note deleted successfully"}
+
+@app.post("/create-user")
+def create_user(username: str, password: str, db: Session = Depends(get_db)):
+    user = User(username=username, password=password) # Objeto de modelo
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
