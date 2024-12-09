@@ -1,7 +1,15 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
 import uuid
+
+from routes import notes, auth
+
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
 from app.routes import notes, auth
@@ -9,7 +17,7 @@ from app.database import Base, engine, get_db
 from app.models import User # Importe todos os modelos definidos 
 from sqlalchemy.orm import Session
 
-
+# TODO NÃO SEI SE O ERRO É AQUI 
 # Cria as tabelas no banco
 Base.metadata.create_all(bind=engine)
 
