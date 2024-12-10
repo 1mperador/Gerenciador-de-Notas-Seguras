@@ -3,6 +3,13 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from fastapi import HTTPException
 
+
+from sqlalchemy.orm import Session  # Importando o tipo correto de sessão
+
+from app.utils import verify_password
+from app.models import User
+from app.security import verify_password
+
 SECRET_KEY = "secret"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -12,15 +19,12 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def create_hash(data: str) -> str:
     return pwd_context.hash(data)
 
-def authenticate_user(username: str, password: str, users_db: dict):
-    hashed_password = users_db.get(username)
-    if not hashed_password or not pwd_context.verify(password, hashed_password):
+def authenticate_user(username: str, password: str, db: Session):
+    # Buscar o usuário no banco de dados
+    user = db.query(User).filter(User.username == username).first()  # Assumindo que você tem uma tabela User
+    if not user or not verify_password(password, user.password):
         return False
-    return True
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
-
+    return user
 def create_access_token(data: dict, expires_delta: timedelta):
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta

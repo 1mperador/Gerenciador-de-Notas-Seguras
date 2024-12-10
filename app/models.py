@@ -18,7 +18,17 @@ class NoteOut(BaseModel):
 
 # Modelos de Usuário e Login
 class User(BaseModel):
+    id: int
     username: str
+    email: str
+    is_active: bool
+
+    class Config:
+        orm_mode = True
+
+class UserCreate(BaseModel):
+    username: str
+    email: str
     password: str
 
 class UserLogin(BaseModel):
@@ -31,5 +41,4 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     password = Column(String)
-
 

@@ -4,7 +4,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 
 from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 import uuid
 
@@ -34,6 +34,14 @@ app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 notes_db = {}
 
 # Models
+# class User(BaseModel):
+#     id: int
+#     name: str
+#     email: str
+#     is_active: bool
+#     # metadata: dict = Field(default_factory=dict)  # Campo complexo
+#     full_name: str | None = None
+
 class NoteIn(BaseModel):
     title: str
     content: str
@@ -65,7 +73,7 @@ def read_root():
     return {"detail": "Welcome to the API"}
 
 @app.post("/notes/", response_model=NoteOut)
-def create_note(note: NoteIn):
+def create_note(note: User):
     note_id = str(uuid.uuid4())
     created_at = datetime.utcnow()
     expires_at = None
@@ -103,6 +111,14 @@ def delete_note(note_id: str):
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
     return {"detail": "Note deleted successfully"}
+
+@app.post("/users/", response_model=None)
+async def create_user(user: User):
+    return {"message": "User created"}
+
+# @app.post("/users/", response_model=User)
+# async def create_user(user: User): # TODO !Modelo com resposta 
+#     return user
 
 @app.post("/create-user")
 def create_user(username: str, password: str, db: Session = Depends(get_db)):

@@ -8,15 +8,15 @@ SQL = "sqlite:///./test.db"
 engine = create_engine(
     SQL, connect_args={"check_same_thread": False} # check_same_thread é oara SQLite
 )
-# TODO NÃO SEI O QUE ESTA DE ERRO 
+
 # Sessão
-Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionL = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # BAse para os modelos 
 Base = declarative_base()
 
 def get_db():
-    db = Session()
+    db = SessionL()
     try:
         yield db
     finally:
