@@ -36,7 +36,7 @@ Este projeto é um **gerenciador de notas e arquivos** criado com FastAPI, proje
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seuusuario/gerenciador-de-notas.git
+   git clone https://github.com/1mperador/gerenciador-de-notas.git
    cd gerenciador-de-notas
    ```
 
