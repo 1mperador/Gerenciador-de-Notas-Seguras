@@ -1,5 +1,7 @@
 import sys
 import os
+
+from app.api.auth import auth
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -8,16 +10,20 @@ from pydantic import BaseModel, Field
 from typing import Optional
 import uuid
 
-from routes import notes, auth
+from app.api.notes import notes
 
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
-from app.routes import notes, auth
+from app.api.notes import notes
 from app.database import Base, engine, get_db
 from app.models import User # Importe todos os modelos definidos 
 from sqlalchemy.orm import Session
 
-# TODO NÃO SEI SE O ERRO É AQUI 
+
+from app.api.auth import auth_router
+from app.api.notes import notes_router
+from app.models import Note  # Certifique-se de que está correto
+
 # Cria as tabelas no banco
 Base.metadata.create_all(bind=engine)
 
@@ -27,11 +33,12 @@ app = FastAPI()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Incluindo as rotas
-app.include_router(notes.router, prefix="/notes", tags=["Notes"])
-app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(notes_router, prefix="/notes", tags=["notes"])
 
 # Database simulation (replace with actual database)
 notes_db = {}
+
 
 # Models
 # class User(BaseModel):
@@ -122,7 +129,8 @@ async def create_user(user: User):
 
 @app.post("/create-user")
 def create_user(username: str, password: str, db: Session = Depends(get_db)):
-    user = User(username=username, password=password) # Objeto de modelo
+    hashed_password = create_hash(password)
+    user = User(username=username, password=hashed_password)
     db.add(user)
     db.commit()
     db.refresh(user)

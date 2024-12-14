@@ -1,10 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
-from sqlalchemy import Column, Integer, String
-from .database import Base
+from sqlalchemy import Column, Integer, String, Boolean
+from app.database import Base
 
-# Modelos de Notas
+# Modelos Pydantic
 class NoteIn(BaseModel):
     title: str
     content: str
@@ -16,29 +16,45 @@ class NoteOut(BaseModel):
     created_at: datetime
     expires_at: Optional[datetime]
 
-# Modelos de Usuário e Login
-class User(BaseModel):
-    id: int
-    username: str
-    email: str
-    is_active: bool
-
     class Config:
-        orm_mode = True
+        orm_mode = True  # Permite conversão automática de objetos ORM para Pydantic
 
-class UserCreate(BaseModel):
+class UserBase(BaseModel):
     username: str
-    email: str
-    password: str
+    email: EmailStr
+
+
+class Note(Base):
+    __tablename__ = "notes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    content = Column(String)
+
+    def __init__(self, title: str, content: str):
+        self.title = title
+        self.content = content
+
+class UserCreate(UserBase):
+    password: str  # Adicionado para criação de usuário
 
 class UserLogin(BaseModel):
     username: str
     password: str
 
+class UserResponse(UserBase):
+    id: int
+    is_active: bool
+
+    class Config:
+        orm_mode = True  # Permite conversão automática de objetos ORM para Pydantic
+
+# Modelos SQLAlchemy
 class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    password = Column(String)
-
+    username = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True)

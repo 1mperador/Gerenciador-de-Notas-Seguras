@@ -1,24 +1,25 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker # orm = conversor de sql para py 
+from sqlalchemy.orm import sessionmaker  # ORM: conversor de SQL para Python
 
-SQL = "sqlite:///./test.db"
+# Configuração do banco de dados
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
-# Configuração de engine 
+# Configuração da engine
 engine = create_engine(
-    SQL, connect_args={"check_same_thread": False} # check_same_thread é oara SQLite
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}  # Configuração específica para SQLite
 )
 
-# Sessão
-SessionL = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Sessão de conexão
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# BAse para os modelos 
+# Base para definição dos modelos
 Base = declarative_base()
 
+# Dependência para obter uma sessão de banco de dados
 def get_db():
-    db = SessionL()
+    db = SessionLocal()
     try:
         yield db
     finally:
-        db.clone()
-
+        db.close()

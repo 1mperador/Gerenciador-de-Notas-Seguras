@@ -1,0 +1,2 @@
+from .user import User  # ou o nome correto do arquivo e classe
+from .note import Note
