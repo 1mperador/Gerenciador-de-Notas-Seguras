@@ -15,7 +15,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Base para definição dos modelos
 Base = declarative_base()
-
+# Criação das tabelas (caso ainda não existam)
+Base.metadata.create_all(bind=engine)
 # Dependência para obter uma sessão de banco de dados
 def get_db():
     db = SessionLocal()

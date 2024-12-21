@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, Text
-from app.database import Base  # Assumindo que você tenha uma base de dados configurada
+from app.database.database import Base  # Assumindo que você tenha uma base de dados configurada
 
 class Note(Base):
     __tablename__ = 'notes'
@@ -11,3 +11,10 @@ class Note(Base):
 
     def __repr__(self):
         return f"Note(id={self.id}, title={self.title})"
+
+class NoteOut(BaseModel):
+    title = Column(String) 
+    content = Column(Text)
+
+
+    

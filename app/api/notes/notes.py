@@ -1,15 +1,16 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-from app.database import get_db
-from app.models import Note
-from schemas import NoteCreate, NoteOut
+
+# from schemas import NoteCreate, NoteOut
 from uuid import uuid4
 from datetime import datetime, timedelta
+# from notes import NoteCreate, NoteOut
+
+from app.database.session import get_db
+from app.models import Note
 from app.models.note import Note
-from notes import NoteCreate, NoteOut
 from app.schemas.notes import NoteCreate, NoteOut
 from app.schemas.auth import UserCreate, UserOut
-
 
 
 notes_router = APIRouter()
@@ -49,3 +50,9 @@ def delete_note(note_id: str, db: Session = Depends(get_db)):
     db.delete(note)
     db.commit()
     return {"detail": "Note deleted successfully"}
+
+@notes_router.post("/notes", response_model=NoteOut)
+def create_note(note: NoteCreate):
+    # Aqui você usa o NoteCreate para validar os dados de entrada
+    # E o NoteOut para responder com os dados da nota criada
+    pass

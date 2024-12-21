@@ -2,7 +2,7 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean
-from app.database import Base
+from app.database.database import Base
 
 # Modelos Pydantic
 class NoteIn(BaseModel):
@@ -26,6 +26,7 @@ class UserBase(BaseModel):
 
 class Note(Base):
     __tablename__ = "notes"
+    __table_args__= {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
@@ -35,8 +36,13 @@ class Note(Base):
         self.title = title
         self.content = content
 
-class UserCreate(UserBase):
-    password: str  # Adicionado para criação de usuário
+# negocio do auth.py
+class UserCreate(BaseModel):
+    username: str
+    password: str  
+
+class UserOut(BaseModel):
+    username: str
 
 class UserLogin(BaseModel):
     username: str
@@ -52,9 +58,18 @@ class UserResponse(UserBase):
 # Modelos SQLAlchemy
 class User(Base):
     __tablename__ = "users"
-
+    
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
-    password = Column(String, nullable=False)
-    is_active = Column(Boolean, default=True)
+    name = Column(String, index=True)
+    email = Column(String, unique=True, index=True)
+
+    __table_args__ = {'extend_existing': True}
+
+# class User(Base):
+#     __tablename__ = "users"
+
+#     id = Column(Integer, primary_key=True, index=True)
+#     username = Column(String, unique=True, index=True, nullable=False)
+#     email = Column(String, unique=True, index=True, nullable=False)
+#     password = Column(String, nullable=False)
+#     is_active = Column(Boolean, default=True)

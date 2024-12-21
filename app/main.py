@@ -1,28 +1,29 @@
 import sys
 import os
+import uuid
 
-from app.api.auth import auth
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import Optional
-import uuid
 
-from app.api.notes import notes
 
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
-from app.api.notes import notes
-from app.database import Base, engine, get_db
-from app.models import User # Importe todos os modelos definidos 
 from sqlalchemy.orm import Session
 
 
+from app.models import User # Importe todos os modelos definidos 
+from app.models import Note  # Certifique-se de que está correto
+
+from app.database.session import Base, engine, get_db
+
+from app.api.notes import notes
+from app.api.auth import auth
 from app.api.auth import auth_router
 from app.api.notes import notes_router
-from app.models import Note  # Certifique-se de que está correto
 
 # Cria as tabelas no banco
 Base.metadata.create_all(bind=engine)
@@ -119,9 +120,9 @@ def delete_note(note_id: str):
         raise HTTPException(status_code=404, detail="Note not found")
     return {"detail": "Note deleted successfully"}
 
-@app.post("/users/", response_model=None)
+@app.post("/users/", response_model=User)
 async def create_user(user: User):
-    return {"message": "User created"}
+    return user
 
 # @app.post("/users/", response_model=User)
 # async def create_user(user: User): # TODO !Modelo com resposta 

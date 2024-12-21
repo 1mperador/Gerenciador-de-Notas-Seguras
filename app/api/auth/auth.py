@@ -1,14 +1,18 @@
 # auth.py
 from jose import jwt
 from datetime import datetime, timedelta
-from fastapi import HTTPException
+
 from sqlalchemy.orm import Session
-from app.models import User
-from app.models.user import User
+
+from fastapi import APIRouter
+from fastapi import HTTPException
+
 from app.utils import verify_hash
 from app.utils.verify import verify_hash
-from auth import UserCreate, UserOut
 
+from app.models.user import User
+from app.models import User
+from app.models.models import UserCreate, UserOut   
 
 
 SECRET_KEY = "secret"
@@ -32,3 +36,15 @@ def create_access_token(data: dict, expires_delta: timedelta):
     expire = datetime.utcnow() + expires_delta
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+# auth.py
+def some_function():
+    from app.api.auth.auth import UserCreate, UserOut
+    # Use UserCreate e UserOut aqui
+
+
+auth_router = APIRouter()
+
+# Defina as rotas do auth aqui
+@auth_router.get("/login")
+async def login():
+    return {"message": "Login route"}
