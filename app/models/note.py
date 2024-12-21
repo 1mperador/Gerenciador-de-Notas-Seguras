@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String, Text
 from app.database.database import Base  # Assumindo que você tenha uma base de dados configurada
+from typing import Optional
 
 class Note(Base):
     __tablename__ = 'notes'
@@ -13,8 +14,11 @@ class Note(Base):
         return f"Note(id={self.id}, title={self.title})"
 
 class NoteOut(BaseModel):
-    title = Column(String) 
-    content = Column(Text)
+    id: Optional[int]  # O ID é opcional para casos de criação ou leitura
+    title: str  # Usando tipo nativo de string
+    content: str  # Tipo nativo de string
+
+    class Config:
+        from_attributes = True  # Suporte para integração com SQLAlchemy
 
 
-    

@@ -5,22 +5,10 @@ from typing import Optional
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
-
+# Declarative base para SQLAlchemy
 Base = declarative_base()
 
-# class IgnoredType:
-#     pass
-
-# class MyModel(BaseModel):
-#     model_config = ConfigDict(ignored_types=(IgnoredType,))
-
-#     _a = IgnoredType()
-#     _b: int = IgnoredType()
-#     _c: IgnoredType
-#     _d: IgnoredType = IgnoredType()
-
-
-
+# Modelo SQLAlchemy
 class UserSQLAlchemy(Base):
     __tablename__ = 'users'
 
@@ -28,6 +16,7 @@ class UserSQLAlchemy(Base):
     username = Column(String, index=True)
     email = Column(String, index=True)
 
+# Modelo Pydantic
 class User(BaseModel):
     id: Optional[int]  # Usando a anotação correta para um campo opcional
     username: str
@@ -37,6 +26,7 @@ class User(BaseModel):
         orm_mode = True  # Necessário para usar com SQLAlchemy
 
 
+# Modelo SQLAlchemy para Note
 class NoteSQLAlchemy(Base):
     __tablename__ = 'notes'
 
@@ -44,16 +34,11 @@ class NoteSQLAlchemy(Base):
     title = Column(String, index=True)
     content = Column(String)
 
+# Modelo Pydantic para Note
 class NoteOut(BaseModel):
-    title: str  # Usando a anotação correta para tipo string
-    content: str  # Exemplo de outro campo com anotação
+    id: Optional[int]  # Adicionando ID opcional caso precise retornar com ele
+    title: str  # Usando o tipo correto
+    content: str
 
     class Config:
-        from_attributes = True  # Para permitir a integração com SQLAlch
-
-# class User(BaseModel):
-#     __tablename__ = "users"
-#     id = Column(Integer, primary_key=True, index=True)
-#     username = Column(String, unique=True, index=True)
-#     email = Column(String, unique=True, index=True)
-#     password = Column(String)
+        from_attributes = True  # Suporte para integração com SQLAlchemy
