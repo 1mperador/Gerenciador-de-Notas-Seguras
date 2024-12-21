@@ -74,7 +74,7 @@ def verify_expiration(note_id: str):
         raise HTTPException(status_code=410, detail="Note has expired")
     return note
 
-# Routess
+# Routes
 
 @app.get("/")
 def read_root():
