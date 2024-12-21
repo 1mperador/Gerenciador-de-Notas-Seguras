@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import uuid
 from passlib.context import CryptContext
 
-# Base Configurations
+# Base Configurationss
 app = FastAPI()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
