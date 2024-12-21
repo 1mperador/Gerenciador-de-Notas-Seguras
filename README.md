@@ -36,7 +36,7 @@ Este projeto é um **gerenciador de notas e arquivos** criado com FastAPI, proje
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/1mperador/gerenciador-de-notas.git
+   git clone https://github.com/seuusuario/gerenciador-de-notas.git
    cd gerenciador-de-notas
    ```
 
@@ -128,14 +128,14 @@ O servidor estará disponível em: [http://127.0.0.1:8000](http://127.0.0.1:8000
 - Suporte para organização de arquivos em pastas.
 - Integração com banco de dados para armazenamento persistente.
 - Interface gráfica para facilitar o uso.
-<!--
+
 ## Contribuições
 
 Contribuições são bem-vindas! Siga os passos:
 1. Fork o repositório.
 2. Crie uma branch para sua feature/bugfix: `git checkout -b minha-branch`.
 3. Submeta um pull request.
--->
+
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para mais detalhes. Copyright (c) 2024 1mperador.
