@@ -138,6 +138,6 @@ Contribuições são bem-vindas! Siga os passos:
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para mais detalhes. Copyright (c) 2024 1mperador.
+Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para mais detalhes. Copyright (c) 2025 1mperador.
 
 
