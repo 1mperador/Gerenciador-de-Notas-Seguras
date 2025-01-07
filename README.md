@@ -24,6 +24,7 @@ Este projeto é um **gerenciador de notas e arquivos** criado com FastAPI, proje
 - **FastAPI**
 - **Passlib** (para hash seguro de conteúdo de notas)
 - **Uvicorn** (servidor ASGI)
+- **SQLAlchemy**
 
 ## Como Executar o Projeto
 
